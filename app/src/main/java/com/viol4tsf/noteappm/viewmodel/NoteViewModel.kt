@@ -24,7 +24,5 @@ class NoteViewModel(
         noteRepository.deleteNote(note)
     }
 
-    fun getAllNotes() = viewModelScope.launch {
-        noteRepository.getAllNotes()
-    }
+    fun getAllNotes() = noteRepository.getAllNotes()
 }

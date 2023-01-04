@@ -7,13 +7,20 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.viol4tsf.noteappm.MainActivity
 import com.viol4tsf.noteappm.R
+import com.viol4tsf.noteappm.adapter.NoteAdapter
 import com.viol4tsf.noteappm.databinding.FragmentHomeBinding
+import com.viol4tsf.noteappm.model.Note
+import com.viol4tsf.noteappm.viewmodel.NoteViewModel
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private lateinit var noteViewModel: NoteViewModel
+    private lateinit var noteAdapter: NoteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +28,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val menuHost: MenuHost = requireActivity()
+
+        noteViewModel = (activity as MainActivity).noteViewModel
+        setUpRecyclerView()
 
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -32,6 +44,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 TODO("Not yet implemented")
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
 
         binding.addFloatingActionButton.setOnClickListener{ view ->
             view.findNavController().navigate(R.id.action_homeFragment_to_newNoteFragment)
@@ -51,7 +64,35 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         return binding.root
     }
 
+    private fun setUpRecyclerView(){
+        noteAdapter = NoteAdapter()
 
+        binding.recyclerView.apply {
+            layoutManager = StaggeredGridLayoutManager(
+                2,
+                StaggeredGridLayoutManager.VERTICAL
+            )
+            setHasFixedSize(true)
+            adapter = noteAdapter
+        }
+
+        activity?.let {
+            noteViewModel.getAllNotes().observe(viewLifecycleOwner) { notes ->
+                noteAdapter.differ.submitList(notes)
+                updateUI(notes)
+            }
+        }
+    }
+
+    private fun updateUI(notes: List<Note>){
+        if (notes.isNotEmpty()){
+            binding.recyclerView.visibility = View.VISIBLE
+            binding.noNotesTextView.visibility = View.GONE
+        } else {
+            binding.recyclerView.visibility = View.GONE
+            binding.noNotesTextView.visibility = View.VISIBLE
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()
