@@ -15,6 +15,7 @@
         app:cardElevation="8dp">
 
         <LinearLayout
+            android:id="@+id/noteLL"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="16dp"
@@ -24,6 +25,7 @@
                 android:id="@+id/noteTitleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="100"
                 android:text="Заголовок"
                 android:textColor="@color/black"
                 android:textSize="19sp"
@@ -34,9 +36,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:maxHeight="170dp"
+                android:maxHeight="70dp"
                 android:text="Текст заметки"
-                android:textColor="@color/hintColor"
+                android:textColor="@color/noteTextColor"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 

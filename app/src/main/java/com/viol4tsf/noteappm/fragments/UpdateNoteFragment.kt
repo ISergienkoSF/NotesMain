@@ -60,7 +60,9 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 
             if (title.isNotEmpty()){
                 val note = Note(currentNote.id, title, body)
-                noteViewModel.addNote(note)
+                noteViewModel.updateNote(note)
+                activity?.toast("Заметка обновлена")
+
                 view.findNavController().navigate(R.id.action_updateNoteFragment_to_homeFragment)
             } else {
                 activity?.toast("Пожалуйста, впишите заголовок")
