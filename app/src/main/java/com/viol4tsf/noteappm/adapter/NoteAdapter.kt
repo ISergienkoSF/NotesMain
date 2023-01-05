@@ -45,7 +45,7 @@ class NoteAdapter: RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
         val random = Random()
         val color = Color.argb(
-            100,
+            50,
             random.nextInt(256),
             random.nextInt(256),
             random.nextInt(256)

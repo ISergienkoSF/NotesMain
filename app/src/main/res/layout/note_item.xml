@@ -39,8 +39,7 @@
                 android:maxHeight="70dp"
                 android:text="Текст заметки"
                 android:textColor="@color/noteTextColor"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 

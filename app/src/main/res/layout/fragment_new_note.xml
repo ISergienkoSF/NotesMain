@@ -46,7 +46,6 @@
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
                     android:hint="Текст заметки"
-                    android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textColorHint="@color/hintColor"
                     android:textSize="17sp"
