@@ -1,4 +1,4 @@
-package com.viol4tsf.noteappm.fragments
+package com.viol4tsf.noteappm.ui.fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -9,13 +9,12 @@ import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import com.viol4tsf.noteappm.MainActivity
+import com.viol4tsf.noteappm.ui.MainActivity
 import com.viol4tsf.noteappm.R
-import com.viol4tsf.noteappm.databinding.FragmentNewNoteBinding
 import com.viol4tsf.noteappm.databinding.FragmentUpdateNoteBinding
 import com.viol4tsf.noteappm.model.Note
 import com.viol4tsf.noteappm.other.toast
-import com.viol4tsf.noteappm.viewmodel.NoteViewModel
+import com.viol4tsf.noteappm.ui.viewmodel.NoteViewModel
 
 class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 
@@ -59,7 +58,7 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
             val body = binding.noteBodyUpdateEditText.text.toString().trim()
 
             if (title.isNotEmpty()){
-                val note = Note(currentNote.id, title, body)
+                val note = Note(currentNote.id, title, body, currentNote.creationDate, currentNote.groupName)
                 noteViewModel.updateNote(note)
                 activity?.toast("Заметка обновлена")
 

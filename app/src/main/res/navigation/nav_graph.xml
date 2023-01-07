@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.viol4tsf.noteappm.fragments.HomeFragment"
+        android:name="com.viol4tsf.noteappm.ui.fragments.HomeFragment"
         android:label="Note"
         tools:layout="@layout/fragment_home" >
         <action
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/newNoteFragment"
-        android:name="com.viol4tsf.noteappm.fragments.NewNoteFragment"
+        android:name="com.viol4tsf.noteappm.ui.fragments.NewNoteFragment"
         android:label="New Note"
         tools:layout="@layout/fragment_new_note" >
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/updateNoteFragment"
-        android:name="com.viol4tsf.noteappm.fragments.UpdateNoteFragment"
+        android:name="com.viol4tsf.noteappm.ui.fragments.UpdateNoteFragment"
         android:label="Update Note"
         tools:layout="@layout/fragment_update_note" >
         <action

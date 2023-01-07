@@ -1,4 +1,4 @@
-package com.viol4tsf.noteappm.fragments
+package com.viol4tsf.noteappm.ui.fragments
 
 import android.os.Bundle
 import android.view.*
@@ -8,12 +8,12 @@ import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.viol4tsf.noteappm.MainActivity
+import com.viol4tsf.noteappm.ui.MainActivity
 import com.viol4tsf.noteappm.R
 import com.viol4tsf.noteappm.databinding.FragmentNewNoteBinding
 import com.viol4tsf.noteappm.model.Note
 import com.viol4tsf.noteappm.other.toast
-import com.viol4tsf.noteappm.viewmodel.NoteViewModel
+import com.viol4tsf.noteappm.ui.viewmodel.NoteViewModel
 
 class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
 
@@ -73,7 +73,7 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
         val noteBody = binding.noteBodyEditText.text.toString().trim()
 
         if (noteTitle.isNotEmpty()){
-            val note = Note(0, noteTitle, noteBody)
+            val note = Note(0, noteTitle, noteBody, System.currentTimeMillis(), "")
 
             noteViewModel.addNote(note)
             Snackbar.make(view, "Заметка добавлена", Snackbar.LENGTH_SHORT).show()

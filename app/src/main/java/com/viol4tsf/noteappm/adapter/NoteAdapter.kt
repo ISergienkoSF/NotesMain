@@ -7,16 +7,17 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.viol4tsf.noteappm.R
 import com.viol4tsf.noteappm.databinding.NoteItemBinding
-import com.viol4tsf.noteappm.fragments.HomeFragmentDirections
 import com.viol4tsf.noteappm.model.Note
+import com.viol4tsf.noteappm.ui.fragments.HomeFragmentDirections
 import java.util.*
 
 class NoteAdapter: RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
+    //создание viewholder для адаптера
     class NoteViewHolder(val itemBinding: NoteItemBinding): RecyclerView.ViewHolder(itemBinding.root)
 
+    //коллбек для обнаружения изменений в списке и замене эо=лементов при их изменении
     private val differCallback = object : DiffUtil.ItemCallback<Note>(){
         override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
             return oldItem.id == newItem.id
@@ -27,6 +28,7 @@ class NoteAdapter: RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
         }
     }
 
+    //асинхронный список
     val differ = AsyncListDiffer(this, differCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {

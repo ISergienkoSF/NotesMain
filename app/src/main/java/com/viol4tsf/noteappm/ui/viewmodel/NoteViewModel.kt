@@ -1,4 +1,4 @@
-package com.viol4tsf.noteappm.viewmodel
+package com.viol4tsf.noteappm.ui.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

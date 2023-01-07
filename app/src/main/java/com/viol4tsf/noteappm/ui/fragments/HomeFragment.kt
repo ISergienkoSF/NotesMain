@@ -1,4 +1,4 @@
-package com.viol4tsf.noteappm.fragments
+package com.viol4tsf.noteappm.ui.fragments
 
 import android.os.Bundle
 import android.view.*
@@ -9,12 +9,12 @@ import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.viol4tsf.noteappm.MainActivity
+import com.viol4tsf.noteappm.ui.MainActivity
 import com.viol4tsf.noteappm.R
 import com.viol4tsf.noteappm.adapter.NoteAdapter
 import com.viol4tsf.noteappm.databinding.FragmentHomeBinding
 import com.viol4tsf.noteappm.model.Note
-import com.viol4tsf.noteappm.viewmodel.NoteViewModel
+import com.viol4tsf.noteappm.ui.viewmodel.NoteViewModel
 
 class HomeFragment : Fragment(R.layout.fragment_home),
 SearchView.OnQueryTextListener{
@@ -37,11 +37,13 @@ SearchView.OnQueryTextListener{
         noteViewModel = (activity as MainActivity).noteViewModel
         setUpRecyclerView()
 
+        //добавление интерфейса в меню для данного фрагмента
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menu.clear()
                 menuInflater.inflate(R.menu.home_menu, menu)
 
+                //настройка поисковой строки
                 val mMenuSearch = menu.findItem(R.id.searchMenu).actionView as SearchView
                 mMenuSearch.isSubmitButtonEnabled = true
                 mMenuSearch.setOnQueryTextListener(this@HomeFragment)
@@ -52,9 +54,9 @@ SearchView.OnQueryTextListener{
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-
-        binding.addFloatingActionButton.setOnClickListener{ view ->
-            view.findNavController().navigate(R.id.action_homeFragment_to_newNoteFragment)
+        //переход на фрагмент создания новой заметки
+        binding.addFloatingActionButton.setOnClickListener{ mView ->
+            mView.findNavController().navigate(R.id.action_homeFragment_to_newNoteFragment)
         }
     }
 
@@ -75,6 +77,7 @@ SearchView.OnQueryTextListener{
         noteAdapter = NoteAdapter()
 
         binding.recyclerView.apply {
+            //создание двух столбцов в заметках
             layoutManager = StaggeredGridLayoutManager(
                 2,
                 StaggeredGridLayoutManager.VERTICAL
@@ -122,8 +125,8 @@ SearchView.OnQueryTextListener{
 
     private fun searchNote(query: String?){
         val searchQuery = "%$query%"
-        noteViewModel.searchNotes(searchQuery).observe(this, { nList ->
+        noteViewModel.searchNotes(searchQuery).observe(this) { nList ->
             noteAdapter.differ.submitList(nList)
-        })
+        }
     }
 }

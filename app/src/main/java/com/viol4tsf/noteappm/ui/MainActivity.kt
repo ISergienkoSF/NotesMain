@@ -1,4 +1,4 @@
-package com.viol4tsf.noteappm
+package com.viol4tsf.noteappm.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.viol4tsf.noteappm.databinding.ActivityMainBinding
 import com.viol4tsf.noteappm.db.NoteDatabase
 import com.viol4tsf.noteappm.repository.NoteRepository
-import com.viol4tsf.noteappm.viewmodel.NoteViewModel
-import com.viol4tsf.noteappm.viewmodel.NoteViewModelProviderFactory
+import com.viol4tsf.noteappm.ui.viewmodel.NoteViewModel
+import com.viol4tsf.noteappm.ui.viewmodel.NoteViewModelProviderFactory
 
 class MainActivity : AppCompatActivity() {
 
