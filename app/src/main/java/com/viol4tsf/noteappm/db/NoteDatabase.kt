@@ -47,6 +47,6 @@ abstract class NoteDatabase:RoomDatabase() {
             context.applicationContext,
             NoteDatabase::class.java,
             "note-db"
-        ).build()
+        ).addMigrations(migration2To3).build()
     }
 }

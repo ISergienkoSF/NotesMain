@@ -2,15 +2,18 @@ package com.viol4tsf.noteappm.ui.fragments
 
 import android.os.Bundle
 import android.view.*
+import android.widget.HorizontalScrollView
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.viol4tsf.noteappm.ui.MainActivity
 import com.viol4tsf.noteappm.R
+import com.viol4tsf.noteappm.adapter.GroupAdapter
 import com.viol4tsf.noteappm.adapter.NoteAdapter
 import com.viol4tsf.noteappm.databinding.FragmentHomeBinding
 import com.viol4tsf.noteappm.model.Note
@@ -23,6 +26,7 @@ SearchView.OnQueryTextListener{
     private val binding get() = _binding!!
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var noteAdapter: NoteAdapter
+    private lateinit var groupAdapter: GroupAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +39,9 @@ SearchView.OnQueryTextListener{
         val menuHost: MenuHost = requireActivity()
 
         noteViewModel = (activity as MainActivity).noteViewModel
-        setUpRecyclerView()
+
+        setUpNotesRecyclerView()
+        setUpGroupsRecyclerView()
 
         //добавление интерфейса в меню для данного фрагмента
         menuHost.addMenuProvider(object : MenuProvider {
@@ -58,6 +64,10 @@ SearchView.OnQueryTextListener{
         binding.addFloatingActionButton.setOnClickListener{ mView ->
             mView.findNavController().navigate(R.id.action_homeFragment_to_newNoteFragment)
         }
+        //переход на фрагмент создания новой группы
+        binding.newGroupImageButton.setOnClickListener{ mView ->
+            mView.findNavController().navigate(R.id.action_homeFragment_to_newGroupFragment)
+        }
     }
 
     override fun onCreateView(
@@ -73,10 +83,10 @@ SearchView.OnQueryTextListener{
         return binding.root
     }
 
-    private fun setUpRecyclerView(){
+    private fun setUpNotesRecyclerView(){
         noteAdapter = NoteAdapter()
 
-        binding.recyclerView.apply {
+        binding.notesRecyclerView.apply {
             //создание двух столбцов в заметках
             layoutManager = StaggeredGridLayoutManager(
                 2,
@@ -94,12 +104,28 @@ SearchView.OnQueryTextListener{
         }
     }
 
+    private fun setUpGroupsRecyclerView(){
+        groupAdapter = GroupAdapter()
+
+        binding.groupsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+            adapter = groupAdapter
+        }
+
+        activity?.let {
+            noteViewModel.getAllGroups().observe(viewLifecycleOwner) { groups ->
+                groupAdapter.differ.submitList(groups)
+            }
+        }
+    }
+
     private fun updateUI(notes: List<Note>){
         if (notes.isNotEmpty()){
-            binding.recyclerView.visibility = View.VISIBLE
+            binding.notesRecyclerView.visibility = View.VISIBLE
             binding.noNotesTextView.visibility = View.GONE
         } else {
-            binding.recyclerView.visibility = View.GONE
+            binding.notesRecyclerView.visibility = View.GONE
             binding.noNotesTextView.visibility = View.VISIBLE
         }
     }

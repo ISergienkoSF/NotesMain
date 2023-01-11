@@ -24,6 +24,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_homeFragment_to_newGroupFragment"
+            app:destination="@id/newGroupFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/newNoteFragment"
@@ -54,5 +61,18 @@
             android:name="note"
             app:argType="com.viol4tsf.noteappm.model.Note"
             app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/newGroupFragment"
+        android:name="com.viol4tsf.noteappm.ui.fragments.NewGroupFragment"
+        android:label="New Group"
+        tools:layout="@layout/fragment_new_group" >
+        <action
+            android:id="@+id/action_newGroupFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 </navigation>
