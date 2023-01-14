@@ -3,6 +3,7 @@ package com.viol4tsf.noteappm.ui.fragments
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -15,6 +16,9 @@ import com.viol4tsf.noteappm.databinding.FragmentUpdateNoteBinding
 import com.viol4tsf.noteappm.model.Note
 import com.viol4tsf.noteappm.other.toast
 import com.viol4tsf.noteappm.ui.viewmodel.NoteViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 
@@ -56,9 +60,10 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 
             val title = binding.noteTitleUpdateEditText.text.toString().trim()
             val body = binding.noteBodyUpdateEditText.text.toString().trim()
+            val group = binding.groupUpdateSpinner.selectedItem.toString().trim()
 
             if (title.isNotEmpty()){
-                val note = Note(currentNote.id, title, body, currentNote.creationDate, currentNote.groupName)
+                val note = Note(currentNote.id, title, body, currentNote.creationDate, group)
                 noteViewModel.updateNote(note)
                 activity?.toast("Заметка обновлена")
 
@@ -84,6 +89,26 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+        val data: List<String> = mutableListOf(currentNote.groupName)
+
+        CoroutineScope(Dispatchers.Default).launch {
+            val spinnerAdapter: ArrayAdapter<String> = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                android.R.id.text1,
+                data
+            )
+            (1..noteViewModel.getGroup().size).forEach {
+                if (currentNote.groupName != noteViewModel.getGroup()[it-1]) {
+                    spinnerAdapter.add(noteViewModel.getGroup()[it - 1])
+                }
+            }
+            noteViewModel.getGroup().size
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerAdapter.notifyDataSetChanged()
+            binding.groupUpdateSpinner.adapter = spinnerAdapter
+        }
     }
 
     private fun deleteNote(){

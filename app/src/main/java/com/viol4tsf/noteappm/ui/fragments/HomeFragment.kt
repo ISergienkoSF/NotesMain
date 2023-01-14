@@ -1,8 +1,8 @@
 package com.viol4tsf.noteappm.ui.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
-import android.widget.HorizontalScrollView
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.core.view.MenuHost
@@ -68,6 +68,12 @@ SearchView.OnQueryTextListener{
         binding.newGroupImageButton.setOnClickListener{ mView ->
             mView.findNavController().navigate(R.id.action_homeFragment_to_newGroupFragment)
         }
+
+        binding.groupNameTextView.setOnClickListener {
+            setUpNotesRecyclerView()
+            setUpGroupsRecyclerView()
+            binding.groupNameTextView.setBackgroundColor(Color.parseColor("#C5ACCC"))
+        }
     }
 
     override fun onCreateView(
@@ -105,7 +111,12 @@ SearchView.OnQueryTextListener{
     }
 
     private fun setUpGroupsRecyclerView(){
-        groupAdapter = GroupAdapter()
+        groupAdapter = GroupAdapter{ str ->
+            binding.groupNameTextView.setBackgroundColor(Color.WHITE)
+            noteViewModel.selectGroupWithNotes(str).observe(viewLifecycleOwner){ groupNotes ->
+                noteAdapter.differ.submitList(groupNotes)
+            }
+        }
 
         binding.groupsRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)

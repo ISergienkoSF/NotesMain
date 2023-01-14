@@ -1,5 +1,7 @@
 package com.viol4tsf.noteappm.adapter
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -8,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.viol4tsf.noteappm.databinding.GroupItemBinding
 import com.viol4tsf.noteappm.model.Group
 
-class GroupAdapter: RecyclerView.Adapter<GroupAdapter.GroupViewHolder>(){
+class GroupAdapter(val listener: (String) -> Unit): RecyclerView.Adapter<GroupAdapter.GroupViewHolder>(){
+
+    var currentPos: Int = -1
 
     class GroupViewHolder(val itemBinding: GroupItemBinding): RecyclerView.ViewHolder(itemBinding.root)
 
@@ -32,10 +36,24 @@ class GroupAdapter: RecyclerView.Adapter<GroupAdapter.GroupViewHolder>(){
         )
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
         val currentGroup = differ.currentList[position]
 
         holder.itemBinding.groupNameTextView.text = currentGroup.groupName
+
+        holder.itemView.setOnClickListener{ mView ->
+            val textGroup: String = currentGroup.groupName
+            listener(textGroup)
+            currentPos = position
+            notifyDataSetChanged()
+        }
+
+        if (position == currentPos){
+            holder.itemBinding.groupNameTextView.setBackgroundColor(Color.parseColor("#C5ACCC"))
+        } else {
+            holder.itemBinding.groupNameTextView.setBackgroundColor(Color.WHITE)
+        }
     }
 
     override fun getItemCount(): Int {

@@ -2,18 +2,25 @@ package com.viol4tsf.noteappm.ui.fragments
 
 import android.os.Bundle
 import android.view.*
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.viol4tsf.noteappm.ui.MainActivity
 import com.viol4tsf.noteappm.R
 import com.viol4tsf.noteappm.databinding.FragmentNewNoteBinding
+import com.viol4tsf.noteappm.model.Group
 import com.viol4tsf.noteappm.model.Note
 import com.viol4tsf.noteappm.other.toast
 import com.viol4tsf.noteappm.ui.viewmodel.NoteViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
 
@@ -65,15 +72,34 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+        val data: List<String> = mutableListOf("")
+
+        CoroutineScope(Dispatchers.Default).launch {
+            val spinnerAdapter: ArrayAdapter<String> = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                android.R.id.text1,
+                data
+            )
+            (1..noteViewModel.getGroup().size).forEach {
+                spinnerAdapter.add(noteViewModel.getGroup()[it-1])
+            }
+            noteViewModel.getGroup().size
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerAdapter.notifyDataSetChanged()
+            binding.groupSpinner.adapter = spinnerAdapter
+        }
     }
 
     private fun saveNote(view: View){
 
         val noteTitle = binding.noteTitleEditText.text.toString().trim()
         val noteBody = binding.noteBodyEditText.text.toString().trim()
+        val noteGroup = binding.groupSpinner.selectedItem.toString().trim()
 
         if (noteTitle.isNotEmpty()){
-            val note = Note(0, noteTitle, noteBody, System.currentTimeMillis(), "")
+            val note = Note(0, noteTitle, noteBody, System.currentTimeMillis(), noteGroup)
 
             noteViewModel.addNote(note)
             Snackbar.make(view, "Заметка добавлена", Snackbar.LENGTH_SHORT).show()

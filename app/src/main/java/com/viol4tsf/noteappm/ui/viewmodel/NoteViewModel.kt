@@ -44,4 +44,8 @@ class NoteViewModel(
     fun getAllGroups() = noteRepository.getAllGroups()
 
     fun getGroupWithNotes(groupName: String) = noteRepository.getGroupWithNotes(groupName)
+
+    fun selectGroupWithNotes(query: String) = noteRepository.selectGroupWithNotes(query)
+
+    fun getGroup() = noteRepository.getGroup()
 }

@@ -25,4 +25,8 @@ class NoteRepository(private val db: NoteDatabase) {
     fun getAllGroups() = db.getGroupDao().getAllGroups()
 
     fun getGroupWithNotes(groupName: String) = db.getGroupDao().getGroupWithNotes(groupName)
+
+    fun selectGroupWithNotes(query: String) = db.getNoteDao().selectGroupWithNotes(query)
+
+    fun getGroup() = db.getGroupDao().getGroup()
 }

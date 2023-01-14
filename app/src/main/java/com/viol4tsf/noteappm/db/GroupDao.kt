@@ -23,4 +23,7 @@ interface GroupDao {
     @Transaction
     @Query("SELECT * FROM groups WHERE groupName = :groupName")
     fun getGroupWithNotes(groupName: String): LiveData<List<GroupWithNotes>>
+
+    @Query("SELECT groupName FROM groups")
+    fun getGroup():List<String>
 }

@@ -27,6 +27,27 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Папка:"
+                        android:textSize="16sp"
+                        android:gravity="end"
+                        android:layout_weight="2"
+                        android:layout_marginEnd="10dp"/>
+
+                    <Spinner
+                        android:id="@+id/groupUpdateSpinner"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
                 <EditText
                     android:id="@+id/noteTitleUpdateEditText"
                     android:layout_width="match_parent"
