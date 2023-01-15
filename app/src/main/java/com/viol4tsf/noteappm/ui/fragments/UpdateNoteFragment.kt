@@ -90,9 +90,18 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-        val data: List<String> = mutableListOf(currentNote.groupName)
-
         CoroutineScope(Dispatchers.Default).launch {
+
+            val groups = noteViewModel.getGroup()
+            val name = currentNote.groupName
+            val value: String
+            value = if(name in groups){
+                name
+            } else {
+                ""
+            }
+            val data: List<String> = mutableListOf(value)
+
             val spinnerAdapter: ArrayAdapter<String> = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,

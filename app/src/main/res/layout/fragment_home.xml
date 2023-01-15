@@ -62,11 +62,11 @@
 
             <ImageButton
                 android:backgroundTint="@color/colorPrimary"
-                android:id="@+id/newGroupImageButton"
+                android:id="@+id/groupListImageButton"
                 android:layout_width="37dp"
                 android:layout_height="37dp"
-                android:src="@drawable/ic_baseline_create_new_folder_24"
-                app:tint="@color/black" />
+                android:src="@drawable/ic_baseline_folder_copy_24"
+                app:tint="@color/white" />
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>

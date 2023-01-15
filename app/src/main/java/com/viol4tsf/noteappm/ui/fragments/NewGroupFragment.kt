@@ -69,18 +69,18 @@ class NewGroupFragment : Fragment(R.layout.fragment_new_group) {
 
     private fun saveGroup(view: View){
 
-        val groupName = binding.addGroupNameEditText.text.toString().trim()
-
-        if (groupName.isNotEmpty()){
-            val group = Group(groupName)
-
-            noteViewModel.addGroup(group)
-            Snackbar.make(view, "Группа добавлена", Snackbar.LENGTH_SHORT).show()
-
-            view.findNavController().navigate(R.id.action_newGroupFragment_to_homeFragment)
-        } else {
-            activity?.toast("Пожалуйста, впишите название группы")
-        }
+//        val groupName = binding.addGroupNameEditText.text.toString().trim()
+//
+//        if (groupName.isNotEmpty()){
+//            val group = Group(groupName)
+//
+//            noteViewModel.addGroup(group)
+//            Snackbar.make(view, "Группа добавлена", Snackbar.LENGTH_SHORT).show()
+//
+//            view.findNavController().navigate(R.id.action_newGroupFragment_to_homeFragment)
+//        } else {
+//            activity?.toast("Пожалуйста, впишите название группы")
+//        }
     }
 
     override fun onDestroy() {

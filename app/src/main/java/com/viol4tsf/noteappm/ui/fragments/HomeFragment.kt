@@ -65,8 +65,8 @@ SearchView.OnQueryTextListener{
             mView.findNavController().navigate(R.id.action_homeFragment_to_newNoteFragment)
         }
         //переход на фрагмент создания новой группы
-        binding.newGroupImageButton.setOnClickListener{ mView ->
-            mView.findNavController().navigate(R.id.action_homeFragment_to_newGroupFragment)
+        binding.groupListImageButton.setOnClickListener{ mView ->
+            mView.findNavController().navigate(R.id.action_homeFragment_to_groupListFragment)
         }
 
         binding.groupNameTextView.setOnClickListener {
