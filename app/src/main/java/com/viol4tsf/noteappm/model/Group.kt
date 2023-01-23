@@ -9,6 +9,8 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "groups")
 @Parcelize
 data class Group(
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id", defaultValue = "0")
+    val id: Int,
     val groupName: String
 ): Parcelable

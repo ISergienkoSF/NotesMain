@@ -4,13 +4,16 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.viol4tsf.noteappm.databinding.GroupItemBinding
 import com.viol4tsf.noteappm.model.Group
+import com.viol4tsf.noteappm.ui.viewmodel.NoteViewModel
 
-class GroupAdapter(val listener: (String) -> Unit): RecyclerView.Adapter<GroupAdapter.GroupViewHolder>(){
+class GroupAdapter(private val lifecycleOwner: LifecycleOwner, private val noteViewModel: NoteViewModel): RecyclerView.Adapter<GroupAdapter.GroupViewHolder>(){
 
     var currentPos: Int = -1
 
@@ -40,11 +43,21 @@ class GroupAdapter(val listener: (String) -> Unit): RecyclerView.Adapter<GroupAd
     override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
         val currentGroup = differ.currentList[position]
 
+        noteViewModel.mutableSelectedIdGroup.observe(lifecycleOwner, Observer {
+            if (0 <= it){
+                if (position == it){
+                    holder.itemBinding.groupNameTextView.setBackgroundColor(Color.parseColor("#C5ACCC"))
+                    currentPos = position
+                    //noteViewModel.mutableSelectedIdGroup.value = -1
+                }
+            }
+        })
+
         holder.itemBinding.groupNameTextView.text = currentGroup.groupName
 
         holder.itemView.setOnClickListener{ mView ->
-            val textGroup: String = currentGroup.groupName
-            listener(textGroup)
+            noteViewModel.mutableSelectedGroup.value = currentGroup.groupName
+            noteViewModel.mutableSelectedIdGroup.value = position
             currentPos = position
             notifyDataSetChanged()
         }

@@ -50,9 +50,7 @@ class GroupListFragment : Fragment() {
     }
 
     private fun setUpGroupsRecyclerView(){
-        groupListAdapter = GroupListAdapter(noteViewModel) { group ->
-            showUpdateGroupAlertDialog(group)
-        }
+        groupListAdapter = GroupListAdapter(noteViewModel)
 
         binding.groupsRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -96,36 +94,9 @@ class GroupListFragment : Fragment() {
                     dialogBinding.newGroupInputEditText.error = "Пустое значение"
                     return@setOnClickListener
                 }
-                val group = Group(name)
+                val group = Group(0, name)
                 noteViewModel.addGroup(group)
-                dialog.dismiss()
-            }
-        }
-        dialog.show()
-    }
 
-    private fun showUpdateGroupAlertDialog(group: Group){
-        val dialogBinding: GroupDialogBinding = GroupDialogBinding.inflate(layoutInflater)
-        dialogBinding.newGroupInputEditText.setText(group.groupName)
-
-        val dialog: AlertDialog = AlertDialog.Builder(context)
-            .setTitle("Редактирование папки")
-            .setView(dialogBinding.root)
-            .setPositiveButton("Изменить", null)
-            .create()
-
-        dialog.setOnShowListener{
-            dialogBinding.newGroupInputEditText.requestFocus()
-
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener{
-                val name: String = dialogBinding.newGroupInputEditText.text.toString().trim()
-                if (name.isBlank()){
-                    dialogBinding.newGroupInputEditText.error = "Пустое значение"
-                    return@setOnClickListener
-                }
-                val updGroup = Group(name)
-                noteViewModel.addGroup(updGroup)
-                noteViewModel.deleteGroup(group)
                 dialog.dismiss()
             }
         }

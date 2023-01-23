@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -69,9 +70,12 @@ SearchView.OnQueryTextListener{
             mView.findNavController().navigate(R.id.action_homeFragment_to_groupListFragment)
         }
 
+        binding.groupNameTextView.setBackgroundColor(Color.parseColor("#C5ACCC"))
         binding.groupNameTextView.setOnClickListener {
-            setUpNotesRecyclerView()
-            setUpGroupsRecyclerView()
+            //setUpNotesRecyclerView()
+            noteViewModel.mutableSelectedGroup.value = ""
+            noteViewModel.mutableSelectedIdGroup.value = -1
+            setUpAllGroups()
             binding.groupNameTextView.setBackgroundColor(Color.parseColor("#C5ACCC"))
         }
     }
@@ -89,9 +93,16 @@ SearchView.OnQueryTextListener{
         return binding.root
     }
 
-    private fun setUpNotesRecyclerView(){
-        noteAdapter = NoteAdapter()
+    override fun onResume() {
+        super.onResume()
+        if (noteViewModel.mutableSelectedGroup.value == ""){
+            binding.groupNameTextView.setBackgroundColor(Color.parseColor("#C5ACCC"))
+        }
+        //setUpGroupsRecyclerView()
+    }
 
+    private fun setUpNotesRecyclerView(){
+        noteAdapter = NoteAdapter(noteViewModel)
         binding.notesRecyclerView.apply {
             //создание двух столбцов в заметках
             layoutManager = StaggeredGridLayoutManager(
@@ -102,20 +113,40 @@ SearchView.OnQueryTextListener{
             adapter = noteAdapter
         }
 
-        activity?.let {
-            noteViewModel.getAllNotes().observe(viewLifecycleOwner) { notes ->
-                noteAdapter.differ.submitList(notes)
-                updateUI(notes)
+        if (noteViewModel.mutableSelectedGroup.value == null){
+            activity?.let {
+                noteViewModel.getAllNotes().observe(viewLifecycleOwner) { notes ->
+                    noteAdapter.differ.submitList(notes)
+                    updateUI(notes)
+                }
             }
         }
+//        activity?.let {
+//            noteViewModel.getAllNotes().observe(viewLifecycleOwner) { notes ->
+//                noteAdapter.differ.submitList(notes)
+//                updateUI(notes)
+//            }
+//        }
     }
 
     private fun setUpGroupsRecyclerView(){
-        groupAdapter = GroupAdapter{ str ->
-            binding.groupNameTextView.setBackgroundColor(Color.WHITE)
-            noteViewModel.selectGroupWithNotes(str).observe(viewLifecycleOwner){ groupNotes ->
-                noteAdapter.differ.submitList(groupNotes)
-            }
+        groupAdapter = GroupAdapter(viewLifecycleOwner, noteViewModel)
+        activity?.let {
+            noteViewModel.mutableSelectedGroup.observe(viewLifecycleOwner, Observer { str ->
+                if (str != ""){
+                    binding.groupNameTextView.setBackgroundColor(Color.WHITE)
+                    noteViewModel.selectGroupWithNotes(str).observe(viewLifecycleOwner) { groupNotes ->
+                        noteAdapter.differ.submitList(groupNotes)
+                        updateUI(groupNotes)
+                    }
+                } else {
+                    binding.groupNameTextView.setBackgroundColor(Color.parseColor("#C5ACCC"))
+                    noteViewModel.getAllNotes().observe(viewLifecycleOwner) { notes ->
+                        noteAdapter.differ.submitList(notes)
+                        updateUI(notes)
+                    }
+                }
+            })
         }
 
         binding.groupsRecyclerView.apply {
@@ -127,6 +158,29 @@ SearchView.OnQueryTextListener{
         activity?.let {
             noteViewModel.getAllGroups().observe(viewLifecycleOwner) { groups ->
                 groupAdapter.differ.submitList(groups)
+            }
+        }
+    }
+
+    private fun setUpAllGroups(){
+        groupAdapter = GroupAdapter(viewLifecycleOwner, noteViewModel)
+
+        binding.groupsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+            adapter = groupAdapter
+        }
+
+        activity?.let {
+            noteViewModel.getAllGroups().observe(viewLifecycleOwner) { groups ->
+                groupAdapter.differ.submitList(groups)
+            }
+        }
+
+        activity?.let {
+            noteViewModel.getAllNotes().observe(viewLifecycleOwner) { notes ->
+                noteAdapter.differ.submitList(notes)
+                updateUI(notes)
             }
         }
     }

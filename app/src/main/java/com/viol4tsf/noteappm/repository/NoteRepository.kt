@@ -1,6 +1,7 @@
 package com.viol4tsf.noteappm.repository
 
 import com.viol4tsf.noteappm.db.NoteDatabase
+import com.viol4tsf.noteappm.db.relations.GroupWithNotes
 import com.viol4tsf.noteappm.model.Group
 import com.viol4tsf.noteappm.model.Note
 
@@ -13,6 +14,8 @@ class NoteRepository(private val db: NoteDatabase) {
     suspend fun deleteNote(note: Note) = db.getNoteDao().deleteNote(note)
 
     fun getAllNotes() = db.getNoteDao().getAllNotes()
+
+    fun getNote() = db.getNoteDao().getNote()
 
     fun searchNotes(query: String?) = db.getNoteDao().searchNote(query)
 

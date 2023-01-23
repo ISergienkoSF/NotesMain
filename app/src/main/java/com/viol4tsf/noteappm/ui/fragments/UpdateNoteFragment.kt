@@ -1,7 +1,10 @@
 package com.viol4tsf.noteappm.ui.fragments
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
@@ -118,6 +121,22 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
             spinnerAdapter.notifyDataSetChanged()
             binding.groupUpdateSpinner.adapter = spinnerAdapter
         }
+
+        val startSum = binding.noteBodyUpdateEditText.text.length
+        binding.symbolSumUpdateTextView.text = "Количество символов: $startSum"
+
+        binding.noteBodyUpdateEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            @SuppressLint("SetTextI18n")
+            override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                val sum = s?.length
+                binding.symbolSumUpdateTextView.text = "Количество символов: $sum"
+            }
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
     }
 
     private fun deleteNote(){

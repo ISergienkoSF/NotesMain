@@ -24,4 +24,7 @@ interface NoteDao {
 
     @Query("SELECT * FROM notes WHERE groupName LIKE :query")
     fun selectGroupWithNotes (query: String): LiveData<List<Note>>
+
+    @Query("SELECT * FROM notes")
+    fun getNote():List<Note>
 }
