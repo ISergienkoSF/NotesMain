@@ -2,6 +2,7 @@ package com.viol4tsf.noteappm.ui.fragments
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -79,7 +80,7 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menu.clear()
-                menuInflater.inflate(R.menu.update_menu, menu)
+                menuInflater.inflate(R.menu.update_note_menu, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -87,6 +88,16 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
                     R.id.deleteMenu -> {
                         deleteNote()
                         true
+                    }
+                    R.id.shareMenu -> {
+                        val myIntent = Intent()
+                        myIntent.action = Intent.ACTION_SEND
+                        myIntent.type = "type/plain"
+                        val shareBody: String = binding.noteTitleUpdateEditText.text.toString() +
+                                "\n" + binding.noteBodyUpdateEditText.text.toString()
+                        myIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+                        startActivity(Intent.createChooser(myIntent, "Поделиться заметкой"))
+                        return true
                     }
                     else -> false
                 }
@@ -97,8 +108,7 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 
             val groups = noteViewModel.getGroup()
             val name = currentNote.groupName
-            val value: String
-            value = if(name in groups){
+            val value: String = if(name in groups){
                 name
             } else {
                 ""

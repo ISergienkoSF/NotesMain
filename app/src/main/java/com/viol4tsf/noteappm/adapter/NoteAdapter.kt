@@ -2,6 +2,7 @@ package com.viol4tsf.noteappm.adapter
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -91,6 +92,16 @@ class NoteAdapter(private val noteViewModel: NoteViewModel): RecyclerView.Adapte
                             val alertDialog: AlertDialog = builder.create()
                             alertDialog.setCancelable(true)
                             alertDialog.show()
+                            return true
+                        }
+                        R.id.shareNoteContextMenu -> {
+                            val myIntent = Intent()
+                            myIntent.action = Intent.ACTION_SEND
+                            myIntent.type = "type/plain"
+                            val shareBody: String = holder.itemBinding.noteTitleTextView.text.toString() +
+                                    "\n" + holder.itemBinding.noteBodyTextView.text.toString()
+                            myIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+                            context.startActivity(Intent.createChooser(myIntent, "Поделиться заметкой"))
                             return true
                         }
                         else -> return false

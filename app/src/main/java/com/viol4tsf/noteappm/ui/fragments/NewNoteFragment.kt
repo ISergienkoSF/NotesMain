@@ -77,7 +77,12 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-        val data: List<String> = mutableListOf("")
+        val group: String = if(noteViewModel.mutableSelectedGroup.value != "" && noteViewModel.mutableSelectedGroup.value != null){
+            noteViewModel.mutableSelectedGroup.value.toString()
+        } else {
+            ""
+        }
+        val data: List<String> = mutableListOf(group)
 
         CoroutineScope(Dispatchers.Default).launch {
             val spinnerAdapter: ArrayAdapter<String> = ArrayAdapter(
@@ -87,7 +92,9 @@ class NewNoteFragment : Fragment(R.layout.fragment_new_note) {
                 data
             )
             (1..noteViewModel.getGroup().size).forEach {
-                spinnerAdapter.add(noteViewModel.getGroup()[it-1])
+                if (group != noteViewModel.getGroup()[it-1]) {
+                    spinnerAdapter.add(noteViewModel.getGroup()[it - 1])
+                }
             }
             noteViewModel.getGroup().size
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
